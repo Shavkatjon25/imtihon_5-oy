@@ -3,8 +3,15 @@ const asos2=document.getElementById("asos2");
 let otkaz=1;
 let mas=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 let malJson=null;
+let malumot=null;
 async function manba(){
-    const malumot=await fetch("https://countries-api-v7sn.onrender.com/countries?limit=12&skip="+12*(otkaz-1));
+    var selectElement = document.getElementById("roy");
+    var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+    console.log( selectedOption);
+    if(!(selectedOption=="Filter by Region")){
+        malumot=await fetch(`https://countries-api-v7sn.onrender.com/countries?region=${selectedOption}&skip=`+12*(otkaz-1)); 
+    }else{malumot=await fetch("https://countries-api-v7sn.onrender.com/countries?limit=12&skip="+12*(otkaz-1));}
+     
     malJson=await malumot.json();
     asos.innerHTML=""
     let s=0;
@@ -231,7 +238,7 @@ document.getElementById("dr").addEventListener("click", function(){
 
 
 async function ch(a){
-    const davlat=await fetch("https://countries-api-v7sn.onrender.com/countries?search="+mss.borders[a].common)
+    const davlat=await fetch("https://countries-api-v7sn.onrender.com/countries?search="+mss.borders[a].common+"&skip")
     malJson=await davlat.json();
     const qdr=Array.from(malJson.data);
     asos.innerHTML="";
@@ -259,11 +266,19 @@ function chegara(a){
     asos.innerHTML=`            <span class="loading loading-dots loading-xs"></span>
     <span class="loading loading-dots loading-sm"></span>
     <span class="loading loading-dots loading-md"></span>
-    <span class="loading loading-dots loading-lg"></span>
-    <span class="loading loading-dots loading-md"></span>
-    <span class="loading loading-dots loading-sm"></span>
-    <span class="loading loading-dots loading-xs"></span>`
+    <span class="loading loading-dots loading-lg"></span>`
     console.log(mss.borders[a].common);
     birIkki();
     ch(a);
 }
+
+
+
+const d1=document.getElementById("roy");
+let oz=0
+d1.addEventListener("click", function(){
+oz++;
+if(oz%2==0){manba()}
+})
+
+
